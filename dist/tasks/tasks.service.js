@@ -17,6 +17,9 @@ let TasksService = class TasksService {
     getAllTasks() {
         return this.tasks;
     }
+    getTaskById(id) {
+        return this.tasks.find((task) => task.id === id);
+    }
     createTask(createTaskDto) {
         const { title, description } = createTaskDto;
         const task = {
@@ -26,6 +29,14 @@ let TasksService = class TasksService {
             status: task_model_1.TaskStatus.OPEN,
         };
         this.tasks.push(task);
+        return task;
+    }
+    deleteTask(id) {
+        this.tasks = this.tasks.filter((task) => task.id !== id);
+    }
+    updateTaskStatus(id, status) {
+        const task = this.getTaskById(id);
+        task.status = status;
         return task;
     }
 };
