@@ -8,7 +8,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TasksService = void 0;
 const common_1 = require("@nestjs/common");
+const task_model_1 = require("./task.model");
+const uuid_1 = require("uuid");
 let TasksService = class TasksService {
+    constructor() {
+        this.tasks = [];
+    }
+    getAllTasks() {
+        return this.tasks;
+    }
+    createTask(title, description) {
+        const task = {
+            id: (0, uuid_1.v4)(),
+            title,
+            description,
+            status: task_model_1.TaskStatus.OPEN,
+        };
+        this.tasks.push(task);
+        return task;
+    }
 };
 exports.TasksService = TasksService;
 exports.TasksService = TasksService = __decorate([
