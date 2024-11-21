@@ -1,9 +1,9 @@
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from './task.entity';
-import { Repository } from 'typeorm';
+import { TaskRepository } from './tasks.repository';
 export declare class TasksService {
     private taskRepository;
-    constructor(taskRepository: Repository<Task>);
+    constructor(taskRepository: TaskRepository);
     getTaskByid(id: string): Promise<Task>;
     createTask(createTaskDto: CreateTaskDto): Promise<Task>;
 }

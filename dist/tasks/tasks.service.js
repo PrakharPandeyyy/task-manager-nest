@@ -17,7 +17,7 @@ const common_1 = require("@nestjs/common");
 const task_status_enum_1 = require("./task-status.enum");
 const typeorm_1 = require("@nestjs/typeorm");
 const task_entity_1 = require("./task.entity");
-const typeorm_2 = require("typeorm");
+const tasks_repository_1 = require("./tasks.repository");
 let TasksService = class TasksService {
     constructor(taskRepository) {
         this.taskRepository = taskRepository;
@@ -46,6 +46,6 @@ exports.TasksService = TasksService;
 exports.TasksService = TasksService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(task_entity_1.Task)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [tasks_repository_1.TaskRepository])
 ], TasksService);
 //# sourceMappingURL=tasks.service.js.map
