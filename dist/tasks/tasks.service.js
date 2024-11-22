@@ -20,32 +20,26 @@ let TasksService = class TasksService {
     constructor(taskRepository) {
         this.taskRepository = taskRepository;
     }
-    getTasks(filterDto) {
-        return this.taskRepository.getTasks(filterDto);
+    getTasks(filterDto, user) {
+        return this.taskRepository.getTasks(filterDto, user);
     }
-    async getTaskByid(id) {
+    async getTaskByid(id, user) {
         try {
-            const task = await this.taskRepository.findOne({ where: { id } });
+            const task = await this.taskRepository.findOne({ where: { id, user } });
             return task;
         }
         catch (e) {
             throw new common_1.NotFoundException('Task Does not exist');
         }
     }
-    createTask(createTaskDto) {
-        return this.taskRepository.createTask(createTaskDto);
+    createTask(createTaskDto, user) {
+        return this.taskRepository.createTask(createTaskDto, user);
     }
     async deleteTask(id) {
         const result = await this.taskRepository.delete(id);
         if (result.affected === 0) {
             throw new common_1.NotFoundException(`Task with ID "${id}" not found`);
         }
-    }
-    async updateTaskStatus(id, status) {
-        const task = await this.getTaskByid(id);
-        task.status = status;
-        await this.taskRepository.save(task);
-        return task;
     }
 };
 exports.TasksService = TasksService;

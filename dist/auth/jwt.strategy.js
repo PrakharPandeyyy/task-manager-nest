@@ -12,38 +12,33 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthService = void 0;
+exports.JwtStrategy = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
+const passport_1 = require("@nestjs/passport");
+const passport_jwt_1 = require("passport-jwt");
 const users_respository_1 = require("./users.respository");
-const bcrypt = require("bcrypt");
-const jwt_1 = require("@nestjs/jwt");
-let AuthService = class AuthService {
-    constructor(userRepository, jwtService) {
+const typeorm_1 = require("@nestjs/typeorm");
+let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
+    constructor(userRepository) {
+        super({
+            secretOrKey: 'pptg',
+            jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+        });
         this.userRepository = userRepository;
-        this.jwtService = jwtService;
     }
-    async signUp(authCredentialsDto) {
-        return await this.userRepository.createUser(authCredentialsDto);
-    }
-    async signIn(authCredentialsDto) {
-        const { username, password } = authCredentialsDto;
+    async validate(payload) {
+        const { username } = payload;
         const user = await this.userRepository.findOne({ where: { username } });
-        if (user && (await bcrypt.compare(password, user.password))) {
-            const payload = { username };
-            const accessToken = await this.jwtService.sign(payload);
-            return { accessToken };
+        if (!user) {
+            throw new common_1.UnauthorizedException();
         }
-        else {
-            throw new common_1.UnauthorizedException('Please check your login Credentials');
-        }
+        return user;
     }
 };
-exports.AuthService = AuthService;
-exports.AuthService = AuthService = __decorate([
+exports.JwtStrategy = JwtStrategy;
+exports.JwtStrategy = JwtStrategy = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(users_respository_1.UserRepository)),
-    __metadata("design:paramtypes", [users_respository_1.UserRepository,
-        jwt_1.JwtService])
-], AuthService);
-//# sourceMappingURL=auth.service.js.map
+    __metadata("design:paramtypes", [users_respository_1.UserRepository])
+], JwtStrategy);
+//# sourceMappingURL=jwt.strategy.js.map
