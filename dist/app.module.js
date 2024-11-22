@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const tasks_module_1 = require("./tasks/tasks.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const auth_module_1 = require("./auth/auth.module");
+const authgit_module_1 = require("./add/authgit/authgit.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -30,6 +31,7 @@ exports.AppModule = AppModule = __decorate([
                 synchronize: true,
             }),
             auth_module_1.AuthModule,
+            authgit_module_1.AuthgitModule,
         ],
     })
 ], AppModule);

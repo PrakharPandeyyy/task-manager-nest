@@ -16,12 +16,23 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_respository_1 = require("./users.respository");
+const bcrypt = require("bcrypt");
 let AuthService = class AuthService {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
     async signUp(authCredentialsDto) {
         return await this.userRepository.createUser(authCredentialsDto);
+    }
+    async signIn(authCredentialsDto) {
+        const { username, password } = authCredentialsDto;
+        const user = await this.userRepository.findOne({ where: { username } });
+        if (user && (await bcrypt.compare(password, user.password))) {
+            return 'success';
+        }
+        else {
+            throw new common_1.UnauthorizedException('Please check your login Credentials');
+        }
     }
 };
 exports.AuthService = AuthService;

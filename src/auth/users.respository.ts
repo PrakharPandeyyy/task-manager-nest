@@ -5,6 +5,7 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -12,9 +13,11 @@ export class UserRepository extends Repository<User> {
     super(User, dataSource.createEntityManager());
   }
   async createUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+    const { username, password } = authCredentialsDto;
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = this.create({ username, password: hashedPassword });
     try {
-      const { username, password } = authCredentialsDto;
-      const user = this.create({ username, password });
       await this.save(user);
     } catch (e) {
       if (e.code === '23505') {
